@@ -1,7 +1,5 @@
 # fixioflex
 
-![Logo de fixioflex](ruta-del-logo.png) <!-- Recomiendo que añadas un logo para tu aplicación. Sustituye 'ruta-del-logo.png' con la ruta real del logo. -->
-
 Aplicación móvil para tele rehabilitación, diseñada para facilitar el acceso a tratamientos de rehabilitación a distancia.
 
 Desarrollada con [Flutter](https://flutter.dev/) para proporcionar una experiencia fluida y coherente en diferentes dispositivos móviles.
@@ -19,8 +17,10 @@ Desarrollada con [Flutter](https://flutter.dev/) para proporcionar una experienc
 ## Capturas de pantalla 📱
 
 <!-- Añade algunas capturas de pantalla de tu aplicación. Esto ayuda a dar una idea visual de lo que tu aplicación ofrece. -->
-![Captura 1](ruta-captura1.png)
-![Captura 2](ruta-captura2.png)
+<div style="display:flex">
+  <img src="https://i.imgur.com/ipqLREb.png" alt="drawing" width="200"/>
+  <img src="https://i.imgur.com/syfLHuK.png" alt="drawing" width="200"/>
+</div>
 
 ## Empezando 🚀
 
