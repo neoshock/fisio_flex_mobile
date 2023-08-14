@@ -39,11 +39,11 @@ class _MainTaskDetailState extends State<MainTaskDetail> {
               alignment: Alignment.topLeft,
               child: GridItemHero(
                   tag: 'taskDetail${widget.index}',
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {},
                   child: Stack(
                     children: [
                       ClipPath(
-                        clipper: BezierCurve(controlPoint: 0.1),
+                        clipper: BezierCurve(controlPoint: 0.24),
                         child: Container(
                           width: screenSize.width,
                           height: screenSize.height * 0.69,
@@ -52,6 +52,7 @@ class _MainTaskDetailState extends State<MainTaskDetail> {
                           ),
                         ),
                       ),
+                      _buildReturnButtom(context),
                       _buildPositionedIcon(screenSize, theme),
                       _buildPositionedCompleteContainer(screenSize, theme),
                       _buildPositionedTitle(screenSize, theme),
@@ -115,6 +116,27 @@ class _MainTaskDetailState extends State<MainTaskDetail> {
         ],
       ),
     ));
+  }
+
+  Positioned _buildReturnButtom(BuildContext context) {
+    return Positioned(
+        top: 60,
+        left: 10,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(15)),
+          child: IconButton(
+            alignment: Alignment.centerRight,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).colorScheme.background,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ));
   }
 
   Positioned _buildPositionedIcon(Size screenSize, ThemeData theme) {

@@ -140,77 +140,68 @@ class MainTaskPage extends StatelessWidget {
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Stack(
-        alignment: Alignment.topCenter,
+      child: Column(
         children: [
-          const SizedBox(
-            height: 150,
-            width: double.infinity,
-          ),
           Container(
             width: double.infinity,
-            height: 90,
+            padding: EdgeInsets.all(15),
+            height: 69,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.tertiary,
               borderRadius: BorderRadius.circular(15),
             ),
-          ),
-          Positioned(
-            top: 15,
-            left: 15,
-            child: Container(
-              height: 30,
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 45, 211, 111),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Text(
-                'Complete',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Theme.of(context).colorScheme.background),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    width: 90,
+                    height: 30,
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 16, 191, 98),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text('Complete',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Theme.of(context).colorScheme.background,
+                            ))),
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Icon(Icons.favorite_border_outlined),
+                ),
+              ],
             ),
           ),
-          Positioned(
-              top: 54,
-              left: 15,
-              child: Row(
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.schedule,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.background),
-                  const SizedBox(width: 6),
                   Text(
-                    '36 Minutes',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Theme.of(context).colorScheme.background),
+                    'Task Title',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Icon(Icons.schedule),
+                      const SizedBox(width: 6),
+                      Text(
+                        '10 Minutes',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
                   )
                 ],
-              )),
-          Positioned(
-              top: 96,
-              left: 15,
-              child: SizedBox(
-                width: 150,
-                child: Text('Main Title Exercise',
-                    style: Theme.of(context).textTheme.bodyMedium),
-              )),
-          // favorite icon button
-          Positioned(
-            top: 15,
-            right: 15,
-            child: Container(
-              height: 30,
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(15),
               ),
-              child: Icon(Icons.favorite,
-                  size: 20, color: Theme.of(context).colorScheme.secondary),
             ),
           ),
         ],
