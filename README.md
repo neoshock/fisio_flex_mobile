@@ -26,8 +26,8 @@ Desarrollada con [Flutter](https://flutter.dev/) para proporcionar una experienc
 
 ### Prerequisitos
 
-- Flutter (Versión X.X.X) <!-- Sustituye X.X.X con la versión de Flutter que estés usando -->
-- Dart (Versión X.X.X)
+- Flutter (Versión 3.13.X) <!-- Sustituye X.X.X con la versión de Flutter que estés usando -->
+- Dart (Versión 3.1.X)
 - Un dispositivo o emulador para pruebas
 
 
