@@ -1,54 +1,66 @@
-import 'package:fisioflex_mobile/widgets/bottom_menu.dart';
+import 'package:fisioflex_mobile/core/auth/providers/auth_provider.dart';
 import 'package:fisioflex_mobile/widgets/forms_inputs.dart';
-import 'package:fisioflex_mobile/widgets/image_animation.dart';
-import 'package:fisioflex_mobile/widgets/move_animations.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends StatefulHookConsumerWidget {
   const LoginForm({Key? key}) : super(key: key);
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
+  Map<String, TextEditingController> controllers = {};
+  final _formKey =
+      GlobalKey<FormState>(); // Crea una clave global única para el formulario.
+
+  @override
+  void initState() {
+    controllers = {
+      'identification': TextEditingController(),
+      'password': TextEditingController()
+    };
+    ref.read(authProvider.notifier).checkIfAuthenticated();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(15),
         child: Form(
+            key: _formKey, // Asigna la clave global al formulario.
             child: Column(
-          children: [
-            MoveToLeftAnimation(
-              timeDelay: 150,
-              widget: textInputWidget('User Name', TextEditingController(),
-                  TextInputType.emailAddress, false, const Icon(Icons.person)),
-            ),
-            MoveToRightAnimation(
-              timeDelay: 300,
-              widget: textInputWidget('Password', TextEditingController(),
-                  TextInputType.visiblePassword, true, const Icon(Icons.lock)),
-            ),
-            ImageAnimation(
-                widget: buttonSubmitWidget('Login', () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const BottomMenu(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return ScaleTransition(
-                      scale: animation.drive(Tween(begin: 0.0, end: 1.0)
-                          .chain(CurveTween(curve: Curves.easeInOut))),
-                      child: child,
-                    );
-                  },
-                  transitionDuration:
-                      const Duration(milliseconds: 500), // Ajusta a tu gusto
-                ),
-              );
-            }, context))
-          ],
-        )));
+              children: [
+                textInputWidget(
+                    'Numero de identificacion',
+                    controllers['identification']!,
+                    TextInputType.emailAddress,
+                    false,
+                    const Icon(Icons.person), (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor ingrese su numero de identificacion';
+                  }
+                }),
+                textInputWidget(
+                    'Contraseña',
+                    controllers['password']!,
+                    TextInputType.visiblePassword,
+                    true,
+                    const Icon(Icons.lock), (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor ingrese su contraseña';
+                  }
+                }),
+                buttonSubmitWidget('Iniciar Sesion', () {
+                  if (_formKey.currentState!.validate()) {
+                    ref.read(authProvider.notifier).login(
+                        controllers['identification']!.text,
+                        controllers['password']!.text);
+                  }
+                }, context)
+              ],
+            )));
   }
 }

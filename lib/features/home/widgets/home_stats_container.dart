@@ -1,8 +1,14 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeStatsContainer extends StatelessWidget {
-  const HomeStatsContainer({Key? key}) : super(key: key);
+  final List<FlSpot> randomData;
+  final int randomNumber;
+  const HomeStatsContainer(
+      {Key? key, required this.randomData, required this.randomNumber})
+      : super(key: key);
 
   FlBorderData get _borderData => FlBorderData(
         show: true,
@@ -15,22 +21,13 @@ class HomeStatsContainer extends StatelessWidget {
       );
 
   LineChartBarData get _lineChartBarData => LineChartBarData(
-        isCurved: true,
-        color: const Color.fromARGB(255, 27, 169, 212),
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 1.5),
-          FlSpot(5, 1.4),
-          FlSpot(7, 3.4),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
-        ],
-      );
+      isCurved: true,
+      color: const Color.fromARGB(255, 27, 169, 212),
+      barWidth: 8,
+      isStrokeCapRound: true,
+      dotData: const FlDotData(show: false),
+      belowBarData: BarAreaData(show: false),
+      spots: randomData);
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +70,7 @@ class HomeStatsContainer extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                '230',
+                '$randomNumber',
                 style: Theme.of(context).textTheme.bodyMedium,
               )
             ],
@@ -112,7 +109,6 @@ class HomeStatsContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildStatIcon(context),
-          _buildStatText(context),
           const SizedBox(height: 15),
           _buildLineChart(),
         ],
@@ -132,9 +128,8 @@ class HomeStatsContainer extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text('130', style: Theme.of(context).textTheme.displayMedium),
-        const SizedBox(width: 6),
-        Text('Repeats', style: Theme.of(context).textTheme.bodySmall),
+        Text(Random().nextInt(23).toString(),
+            style: Theme.of(context).textTheme.displayMedium),
       ],
     );
   }

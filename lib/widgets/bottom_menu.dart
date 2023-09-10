@@ -1,5 +1,6 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:fisioflex_mobile/features/home/pages/main_home_page.dart';
+import 'package:fisioflex_mobile/features/profile/pages/main_profile_page.dart';
 import 'package:fisioflex_mobile/features/task/pages/main_task_page.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _BottomMenuState extends State<BottomMenu> {
   final List<Widget> pages = [
     const MainHomePage(),
     MainTaskPage(),
-    const Text('Hello'),
+    MainProfilePage()
   ];
 
   @override
@@ -48,7 +49,7 @@ class _BottomMenuState extends State<BottomMenu> {
                 Icons.home_outlined,
                 color: Theme.of(context).colorScheme.background,
               ),
-              itemLabel: 'Home',
+              itemLabel: 'Inicio',
             ),
             BottomBarItem(
               inActiveItem: Icon(Icons.add_box,
@@ -57,7 +58,7 @@ class _BottomMenuState extends State<BottomMenu> {
                 Icons.add_box_outlined,
                 color: Theme.of(context).colorScheme.background,
               ),
-              itemLabel: 'Task',
+              itemLabel: 'Tareas',
             ),
             BottomBarItem(
               inActiveItem: Icon(Icons.person,
@@ -66,7 +67,7 @@ class _BottomMenuState extends State<BottomMenu> {
                 Icons.person_outline,
                 color: Theme.of(context).colorScheme.background,
               ),
-              itemLabel: 'Profile',
+              itemLabel: 'Perfil',
             ),
           ],
           onTap: (int value) {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HomeSumaryContainer extends StatelessWidget {
-  const HomeSumaryContainer({Key? key}) : super(key: key);
+  final double totalHours;
+
+  const HomeSumaryContainer({Key? key, required this.totalHours})
+      : super(key: key);
 
   Widget _summaryItem(
       BuildContext context, Icon icon, String title, String subtitle) {
@@ -35,8 +38,8 @@ class HomeSumaryContainer extends StatelessWidget {
                 size: 36,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              '23',
-              'Complete'),
+              '0',
+              'Completadas'),
           _summaryItem(
               context,
               Icon(
@@ -44,8 +47,8 @@ class HomeSumaryContainer extends StatelessWidget {
                 size: 36,
                 color: Theme.of(context).colorScheme.tertiary,
               ),
-              '1.4',
-              'Hours'),
+              '${totalHours.toStringAsFixed(1)}',
+              'Horas'),
           _summaryItem(
               context,
               Icon(
@@ -54,7 +57,7 @@ class HomeSumaryContainer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondaryContainer,
               ),
               '+4',
-              'Sessions'),
+              'Sesiones'),
         ],
       ),
     );

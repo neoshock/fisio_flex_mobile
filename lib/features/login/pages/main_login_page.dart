@@ -17,7 +17,7 @@ class MainLoginPage extends StatelessWidget {
         LoginHeaderTitle(),
         //forms
         LoginForm(),
-        LoginFooter()
+        //LoginFooter()
         //other logins
       ],
     );

@@ -1,4 +1,3 @@
-import 'package:fisioflex_mobile/widgets/image_animation.dart';
 import 'package:flutter/material.dart';
 
 class LoginHeader extends StatelessWidget {
@@ -37,16 +36,14 @@ class LoginHeader extends StatelessWidget {
                   ])),
             )),
         Positioned(
-            top: MediaQuery.of(context).size.height * 0.1,
-            left: MediaQuery.of(context).size.width * 0.1,
-            child: ImageAnimationRotate(
-              widget: imageIconWidget('assets/icons/dumbbell.png'),
-            )),
+          top: MediaQuery.of(context).size.height * 0.1,
+          left: MediaQuery.of(context).size.width * 0.1,
+          child: imageIconWidget('assets/icons/dumbbell.png'),
+        ),
         Positioned(
             top: MediaQuery.of(context).size.height * 0.24,
             left: MediaQuery.of(context).size.width * 0.7,
-            child: ImageAnimation(
-                widget: imageIconWidget('assets/icons/remote-control.png')))
+            child: imageIconWidget('assets/icons/remote-control.png'))
       ],
     );
   }

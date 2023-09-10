@@ -1,10 +1,12 @@
+import 'dart:math';
+
+import 'package:fisioflex_mobile/config/utils.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_date_list.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_header_widget.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_stats_container.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_sumary_container.dart';
-import 'package:fisioflex_mobile/widgets/image_animation.dart';
 import 'package:fisioflex_mobile/widgets/main_title_widget.dart';
-import 'package:fisioflex_mobile/widgets/move_animations.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class MainHomePage extends StatefulWidget {
@@ -16,6 +18,39 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage> {
   bool _showShadow = false;
+
+  late List<FlSpot> _randomData = [];
+  int randomNumber = 0;
+  double randomHours = 0;
+  int selectedDayIndex = 0;
+
+  final random = Random();
+
+  void handleItemSelected(int index) {
+    setState(() {
+      selectedDayIndex = index;
+    });
+    randomize();
+  }
+
+  @override
+  void initState() {
+    randomize();
+    super.initState();
+  }
+
+  void randomize() {
+    _randomData.clear();
+    randomNumber = Random().nextInt(120);
+    randomHours = Random().nextDouble() * 2.1;
+
+    for (int i = 1; i <= 7; i++) {
+      final x = i.toDouble();
+      final y =
+          random.nextDouble() * 3 + 1; // Genera números aleatorios entre 1 y 4.
+      _randomData.add(FlSpot(x, y));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,33 +72,30 @@ class _MainHomePageState extends State<MainHomePage> {
               }
               return true;
             },
-            child: const SingleChildScrollView(
-              padding: EdgeInsets.all(15),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 45),
-                  SizedBox(height: 30),
-                  ImageAnimation(
-                    widget: HomeDateList(),
+                  const SizedBox(height: 45),
+                  const SizedBox(height: 30),
+                  HomeDateList(
+                    onItemSelected: handleItemSelected,
                   ),
-                  SizedBox(height: 30),
-                  MoveToLeftAnimation(
-                      widget: MainTitleWidget(
-                          title: 'Last Week', subtitle: '15/08/2023'),
-                      timeDelay: 150),
-                  SizedBox(height: 30),
-                  MoveToRightAnimation(
-                      widget: HomeSumaryContainer(), timeDelay: 300),
-                  SizedBox(height: 30),
-                  MoveToLeftAnimation(
-                      widget: MainTitleWidget(
-                          title: 'Last Month', subtitle: '15/08/2023'),
-                      timeDelay: 450),
-                  SizedBox(height: 30),
-                  MoveToRightAnimation(
-                      widget: HomeStatsContainer(), timeDelay: 600),
-                  SizedBox(height: 90),
+                  const SizedBox(height: 30),
+                  MainTitleWidget(
+                      title: 'Ultima semana', subtitle: getDateNow()),
+                  const SizedBox(height: 30),
+                  HomeSumaryContainer(totalHours: randomHours),
+                  const SizedBox(height: 30),
+                  MainTitleWidget(
+                      title: 'Resultados recientes', subtitle: getDateNow()),
+                  const SizedBox(height: 30),
+                  HomeStatsContainer(
+                    randomData: _randomData,
+                    randomNumber: randomNumber,
+                  ),
+                  const SizedBox(height: 90),
                 ],
               ),
             ),
