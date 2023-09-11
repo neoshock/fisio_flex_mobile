@@ -19,7 +19,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
 
   Widget _buildTextInput(BuildContext context) {
     return textInputtWithoutlabel(
-      'Search...',
+      'Buscar...',
       TextEditingController(),
       TextInputType.text,
       false,
@@ -88,7 +88,10 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
                         pageBuilder: (context, animation, secondaryAnimation) =>
                             FadeTransition(
                               opacity: animation,
-                              child: MainTaskDetail(index: index),
+                              child: MainTaskDetail(
+                                taskId: task[index].id,
+                                taskStatus: task[index].isCompleted,
+                              ),
                             ),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
@@ -153,10 +156,12 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
+                    color: taskModel.isCompleted
+                        ? const Color.fromARGB(255, 45, 211, 111)
+                        : Theme.of(context).colorScheme.onSurface,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Icon(Icons.favorite_border_outlined),
+                  child: Icon(Icons.check_circle_outline),
                 ),
               ],
             ),
@@ -171,6 +176,8 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
                   Text(
                     taskModel.task.title,
                     style: Theme.of(context).textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -200,7 +207,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 60),
-          PageTitle('Tasks', Icons.check_circle, context),
+          PageTitle('Tareas', Icons.check_circle, context),
           const SizedBox(height: 15),
           _buildTextInput(context),
           const SizedBox(height: 15),

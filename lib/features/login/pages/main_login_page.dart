@@ -9,7 +9,8 @@ class MainLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         //image
@@ -20,6 +21,6 @@ class MainLoginPage extends StatelessWidget {
         //LoginFooter()
         //other logins
       ],
-    );
+    ));
   }
 }

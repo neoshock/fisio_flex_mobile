@@ -6,14 +6,14 @@ class TaskService {
   final String _baseUrl = APP_API_URL;
   final HttpInterceptor _httpInterceptor = HttpInterceptor();
 
-  Future<Response> getTasks(String token) async {
+  Future<Response> getTasks(String token, int idUser) async {
     try {
       _httpInterceptor.addHeaders(
         {'Authorization': "Bearer $token"},
       );
       final dio = _httpInterceptor.dio;
       final response = await dio.get(
-        '${_baseUrl}logged/tasks',
+        '${_baseUrl}patients/$idUser/tasks',
       );
       return response;
     } catch (e) {
@@ -38,6 +38,49 @@ class TaskService {
       );
       return response;
     } catch (e) {
+      return Response(
+        requestOptions: RequestOptions(path: ''),
+        data: {'error': 'Error al obtener las tareas'},
+        statusCode: 500,
+        statusMessage: 'Error al obtener las tareas',
+      );
+    }
+  }
+
+  //get task by id    https://fyc.uteq.edu.ec:4001/logged/task/:id
+  Future<Response> getTaskById(int idTask, String token) async {
+    try {
+      _httpInterceptor.addHeaders(
+        {'Authorization': "Bearer $token"},
+      );
+      final dio = _httpInterceptor.dio;
+      final response = await dio.get(
+        '${_baseUrl}assignments/$idTask/task',
+      );
+      return response;
+    } catch (e) {
+      print(e.toString());
+      return Response(
+        requestOptions: RequestOptions(path: ''),
+        data: {'error': 'Error al obtener las tareas'},
+        statusCode: 500,
+        statusMessage: 'Error al obtener las tareas',
+      );
+    }
+  }
+
+  //update task
+  Future<Response> updateTaskStatus(int idTask, String token) async {
+    try {
+      _httpInterceptor.addHeaders(
+        {'Authorization': "Bearer $token"},
+      );
+      final dio = _httpInterceptor.dio;
+      final response =
+          await dio.patch('${_baseUrl}assignments/$idTask/completed');
+      return response;
+    } catch (e) {
+      print(e.toString());
       return Response(
         requestOptions: RequestOptions(path: ''),
         data: {'error': 'Error al obtener las tareas'},

@@ -26,7 +26,14 @@ class MainTitleWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Text(subtitle, style: Theme.of(context).textTheme.bodySmall)
+        Expanded(
+            flex: 0,
+            child: Text(
+              subtitle,
+              style: Theme.of(context).textTheme.bodySmall,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ))
       ],
     );
   }
