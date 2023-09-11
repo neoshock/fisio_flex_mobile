@@ -13,7 +13,7 @@ class LoginHeaderTitle extends StatelessWidget {
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
-            titleText('Fixioflex Login', context),
+            titleText('Iniciar Sesión', context),
           ],
         ));
   }

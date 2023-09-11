@@ -23,8 +23,6 @@ class _StoriesScreenState extends State<StoriesScreen>
   late YoutubePlayerController _controller;
   late PlayerState _playerState;
   late YoutubeMetaData _videoMetaData;
-  double _volume = 100;
-  bool _muted = false;
   bool _isPlayerReady = false;
 
   @override
@@ -34,7 +32,7 @@ class _StoriesScreenState extends State<StoriesScreen>
       initialVideoId: YoutubePlayer.convertUrlToId(widget.stories.first.url)!,
       flags: const YoutubePlayerFlags(
         mute: false,
-        autoPlay: true,
+        autoPlay: false,
         disableDragSeek: false,
         loop: false,
         isLive: false,

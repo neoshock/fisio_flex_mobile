@@ -69,7 +69,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
 
   Widget _buildGridView(BuildContext context, List<TaskModel> task) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.8,
       child: GridView.builder(
           padding: EdgeInsets.zero,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -77,41 +77,36 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
           ),
           itemCount: task.length,
           itemBuilder: (context, index) {
-            if (index < 6) {
-              return GridItemHero(
-                tag: 'taskDetail$index',
-                onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                        transitionDuration:
-                            const Duration(milliseconds: 600), // Duración
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            FadeTransition(
-                              opacity: animation,
-                              child: MainTaskDetail(
-                                taskId: task[index].id,
-                                taskStatus: task[index].isCompleted,
-                              ),
+            return GridItemHero(
+              tag: 'taskDetail${task[index].id}',
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      transitionDuration:
+                          const Duration(milliseconds: 600), // Duración
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          FadeTransition(
+                            opacity: animation,
+                            child: MainTaskDetail(
+                              taskId: task[index].id,
                             ),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(0.0, 1.0);
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut; // Curva personalizada
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-                          var offsetAnimation = animation.drive(tween);
+                          ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut; // Curva personalizada
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
 
-                          return SlideTransition(
-                              position: offsetAnimation, child: child);
-                        }),
-                  );
-                },
-                child: _buildGridItem(context, task[index]),
-              );
-            } else {
-              return _buildGridItem(context, task[index]);
-            }
+                        return SlideTransition(
+                            position: offsetAnimation, child: child);
+                      }),
+                );
+              },
+              child: _buildGridItem(context, task[index]),
+            );
           }),
     );
   }
@@ -128,7 +123,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(15),
-            height: 69,
+            height: 60,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(15),
@@ -187,6 +182,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
                       Text(
                         '${taskModel.task.estimatedTime.toString()} Minutos',
                         style: Theme.of(context).textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   )
@@ -200,6 +196,12 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
   }
 
   @override
+  void initState() {
+    print('here');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(15),
@@ -209,12 +211,8 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
           const SizedBox(height: 60),
           PageTitle('Tareas', Icons.check_circle, context),
           const SizedBox(height: 15),
-          _buildTextInput(context),
-          const SizedBox(height: 15),
-          _buildChoiceChips(context),
-          const SizedBox(height: 15),
           FutureBuilder(
-              future: ref.read(taskProvider.notifier).getTasks(),
+              future: ref.watch(taskProvider.notifier).getTasks(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {

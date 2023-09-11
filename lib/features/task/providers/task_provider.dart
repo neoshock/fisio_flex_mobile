@@ -18,6 +18,11 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
   final AuthRepository authRepository = AuthRepository();
   final AuthService _authService = AuthService();
 
+  late TaskDetailModel _taskDetailModel;
+  TaskDetailModel get taskDetailModel => _taskDetailModel;
+  late List<TaskModel> _tasksModel = [];
+  List<TaskModel> get tasksModel => _tasksModel;
+
   int status = 0;
 
   Future<List<TaskModel>> getTasks() async {
@@ -30,6 +35,7 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
         final List<TaskModel> tasksList = [];
         for (final task in tasks.data['data']) {
           tasksList.add(TaskModel.fromJson(task));
+          _tasksModel.add(TaskModel.fromJson(task));
         }
         state = tasksList;
         return tasksList;
@@ -65,6 +71,7 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
     if (token != null) {
       final task = await _taskService.getTaskById(idTask, token!);
       if (task.statusCode == 200) {
+        _taskDetailModel = TaskDetailModel.fromJson(task.data['data']);
         return Response(
           requestOptions: RequestOptions(path: ''),
           data: TaskDetailModel.fromJson(task.data['data']),
@@ -92,7 +99,6 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
     final token = await authRepository.getAuthToken();
     if (token != null) {
       final task = await _taskService.updateTaskStatus(idTask, token!);
-      print(task);
       if (task.statusCode == 200) {
         return Response(
           requestOptions: RequestOptions(path: ''),

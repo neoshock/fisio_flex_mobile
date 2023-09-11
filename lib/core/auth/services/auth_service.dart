@@ -20,12 +20,11 @@ class AuthService {
       );
       return response;
     } catch (e) {
-      debugPrint(e.toString());
       return Response(
         requestOptions: RequestOptions(path: ''),
         data: {'error': 'Error al iniciar sesión'},
         statusCode: 500,
-        statusMessage: 'Error al iniciar sesión',
+        statusMessage: 'Credenciales invalidas',
       );
     }
   }

@@ -4,15 +4,14 @@ import 'package:fisioflex_mobile/features/task/providers/task_provider.dart';
 import 'package:fisioflex_mobile/features/task/widgets/bezier_curve_box.dart';
 import 'package:fisioflex_mobile/features/task/widgets/grid_item_hero.dart';
 import 'package:fisioflex_mobile/widgets/main_title_widget.dart';
+import 'package:fisioflex_mobile/widgets/succes_dialog_widget.dart';
+import 'package:fisioflex_mobile/widgets/warning_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MainTaskDetail extends StatefulHookConsumerWidget {
   final int taskId;
-  final bool taskStatus;
-  const MainTaskDetail(
-      {Key? key, required this.taskId, required this.taskStatus})
-      : super(key: key);
+  const MainTaskDetail({Key? key, required this.taskId}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MainTaskDetailState();
@@ -20,18 +19,28 @@ class MainTaskDetail extends StatefulHookConsumerWidget {
 
 class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
   final ValueNotifier<bool> _showBlur = ValueNotifier<bool>(true);
+  bool isCompletedTask = false;
+
+  @override
+  void initState() {
+    ref.read(taskProvider.notifier).getTaskById(widget.taskId).then((value) {
+      final task = value.data as TaskDetailModel;
+      isCompletedTask = task.isCompleted;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
     return FutureBuilder(
-      future: ref.read(taskProvider.notifier).getTaskById(widget.taskId),
+      future: ref.watch(taskProvider.notifier).getTaskById(widget.taskId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             final task = snapshot.data.data as TaskDetailModel;
-            print(task.files);
             return Scaffold(
                 body: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
@@ -65,9 +74,9 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
                               ),
                               _buildReturnButtom(context),
                               _buildPositionedIcon(screenSize, theme,
-                                  widget.taskStatus, task.assignmentId),
+                                  isCompletedTask, task.assignmentId),
                               _buildPositionedCompleteContainer(
-                                  screenSize, theme, widget.taskStatus),
+                                  screenSize, theme, isCompletedTask),
                               _buildPositionedTitle(
                                   screenSize, theme, task.title),
                               Positioned(
@@ -92,13 +101,12 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
                       builder: (context, showBlur, child) => Stack(
                         children: [
                           task.files.isNotEmpty
-                              ? StoriesScreen(
-                                  stories: task.files,
-                                )
+                              ? task.files[0].type != 'mp4'
+                                  ? StoriesScreen(stories: task.files)
+                                  : Center(child: Text('No hay videos'))
                               : Container(
                                   child: Center(child: Text('No hay videos')),
                                 ),
-
                           // Sólo muestra el blur cuando showBlur es verdadero
                           if (showBlur) ...[
                             Container(
@@ -174,7 +182,45 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
       child: ElevatedButton(
         onPressed: () {
           if (!isCompleted) {
-            ref.read(taskProvider.notifier).updateTask(assigmentId);
+            ref
+                .read(taskProvider.notifier)
+                .updateTask(assigmentId)
+                .then((value) {
+              if (value.statusCode != 200) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => WarningDialogWidget(
+                          title: '¡Hubo un problema!',
+                          description: value.statusMessage!,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ));
+              } else {
+                setState(() {
+                  isCompletedTask = true;
+                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => SuccesDialogWidget(
+                          title: '¡Tarea completada!',
+                          description: value.statusMessage!,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ));
+              }
+            });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => WarningDialogWidget(
+                      title: '¡Tarea ya completada!',
+                      description: 'Esta tarea ya ha sido completada',
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ));
           }
         },
         style: ElevatedButton.styleFrom(

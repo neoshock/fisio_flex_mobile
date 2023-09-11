@@ -1,5 +1,6 @@
 import 'package:fisioflex_mobile/core/auth/providers/auth_provider.dart';
 import 'package:fisioflex_mobile/widgets/forms_inputs.dart';
+import 'package:fisioflex_mobile/widgets/warning_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -55,9 +56,25 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 }),
                 buttonSubmitWidget('Iniciar Sesion', () {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(authProvider.notifier).login(
-                        controllers['identification']!.text,
-                        controllers['password']!.text);
+                    ref
+                        .read(authProvider.notifier)
+                        .login(controllers['identification']!.text,
+                            controllers['password']!.text)
+                        .then((value) {
+                      if (value.statusCode != 201) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return WarningDialogWidget(
+                                title: 'Atención!',
+                                description: 'Credenciales invalidas',
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            });
+                      }
+                    });
                   }
                 }, context)
               ],

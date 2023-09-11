@@ -55,10 +55,6 @@ class _MainProfilePageState extends ConsumerState<MainProfilePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      ProfileOptionItem(
-                          icon: Icons.settings,
-                          title: 'Informacion de perfil',
-                          onTap: () {}),
                       const Divider(),
                       ProfileOptionItem(
                           icon: Icons.logout_outlined,
