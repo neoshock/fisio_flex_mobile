@@ -1,13 +1,17 @@
 import 'package:fisioflex_mobile/features/task/models/task_detail_model.dart';
+import 'package:fisioflex_mobile/features/task/models/task_log_model.dart';
 import 'package:fisioflex_mobile/features/task/pages/main_task_video.dart';
 import 'package:fisioflex_mobile/features/task/providers/task_provider.dart';
+import 'package:fisioflex_mobile/features/task/repositories/task_log_repository.dart';
 import 'package:fisioflex_mobile/features/task/widgets/bezier_curve_box.dart';
+import 'package:fisioflex_mobile/features/task/widgets/cronometer_dialog_widget.dart';
 import 'package:fisioflex_mobile/features/task/widgets/grid_item_hero.dart';
 import 'package:fisioflex_mobile/widgets/main_title_widget.dart';
 import 'package:fisioflex_mobile/widgets/succes_dialog_widget.dart';
 import 'package:fisioflex_mobile/widgets/warning_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class MainTaskDetail extends StatefulHookConsumerWidget {
   final int taskId;
@@ -20,6 +24,9 @@ class MainTaskDetail extends StatefulHookConsumerWidget {
 class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
   final ValueNotifier<bool> _showBlur = ValueNotifier<bool>(true);
   bool isCompletedTask = false;
+  FlutterTts flutterTts = FlutterTts();
+  final TaskLogRepository _taskLogRepository =
+      TaskLogRepository(); // Crea una instancia del repositorio
 
   @override
   void initState() {
@@ -27,7 +34,47 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
       final task = value.data as TaskDetailModel;
       isCompletedTask = task.isCompleted;
     });
+    initTts();
     super.initState();
+  }
+
+  void initTts() async {
+    await flutterTts.setLanguage("es-MX");
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setVolume(1.0);
+  }
+
+  void startSpeech(String text) async {
+    await flutterTts.speak(text);
+  }
+
+  void _startTimerAndSaveLog() {
+    // Inicia el cronómetro
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CronometerWidget(
+          onComplete: (int seconds) async {
+            // Cuando se completa el cronómetro, crea un TaskLog y guárdalo
+            final taskLog = TaskLogModel(widget.taskId, [
+              TimeEntryModel(
+                  DateTime.now(),
+                  DateTime.now().add(Duration(
+                      seconds:
+                          seconds))), // Puedes agregar más entradas aquí si es necesario
+            ]);
+            await _taskLogRepository.saveTaskLog(taskLog);
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    flutterTts.stop();
+    flutterTts.setSharedInstance(false);
+    super.dispose();
   }
 
   @override
@@ -36,7 +83,7 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
     final theme = Theme.of(context);
 
     return FutureBuilder(
-      future: ref.watch(taskProvider.notifier).getTaskById(widget.taskId),
+      future: ref.read(taskProvider.notifier).getTaskById(widget.taskId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
@@ -72,9 +119,11 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
                                   ),
                                 ),
                               ),
+                              _buildPositionedMic(screenSize, theme, task),
                               _buildReturnButtom(context),
                               _buildPositionedIcon(screenSize, theme,
                                   isCompletedTask, task.assignmentId),
+                              _buildCronometerButton(screenSize, theme),
                               _buildPositionedCompleteContainer(
                                   screenSize, theme, isCompletedTask),
                               _buildPositionedTitle(
@@ -172,6 +221,42 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
             },
           ),
         ));
+  }
+
+  Positioned _buildCronometerButton(Size screenSize, ThemeData theme) {
+    return Positioned(
+      bottom: screenSize.height * 0.24,
+      left: screenSize.width * 0.42,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primary,
+          shape: BoxShape
+              .circle, // Si no se define, se toma como BoxShape.rectangle
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(18),
+        child: IconButton(
+            splashRadius: 60, // Tamaño del área de efecto al presionar el botón
+            splashColor:
+                theme.colorScheme.background.withOpacity(0.3), // Color del área
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              _startTimerAndSaveLog();
+            },
+            icon: const Icon(
+              Icons.timer,
+              size: 45,
+              color: Colors.white,
+            )),
+      ),
+    );
   }
 
   Positioned _buildPositionedIcon(
@@ -276,6 +361,32 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
           style: theme.textTheme.displayLarge!.copyWith(
             color: theme.colorScheme.background,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildPositionedMic(
+      Size screenSize, ThemeData theme, TaskDetailModel taskDetailModel) {
+    return Positioned(
+      top: 60,
+      left: screenSize.width * 0.4,
+      child: SizedBox(
+        width: screenSize.width,
+        child: IconButton(
+          splashRadius: 60, // Tamaño del área de efecto al presionar el botón
+          splashColor:
+              theme.colorScheme.background.withOpacity(0.3), // Color del área
+          onPressed: () {
+            String text =
+                'Tienes que hacer, ${taskDetailModel.title}, consiste en ${taskDetailModel.description}, esta tarea fue creada el ${taskDetailModel.createdAt}';
+            startSpeech(text);
+          },
+          icon: const Icon(
+            Icons.campaign,
+            size: 45,
+            color: Colors.white,
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:fisioflex_mobile/features/home/widgets/home_date_list.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_header_widget.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_stats_container.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_sumary_container.dart';
+import 'package:fisioflex_mobile/features/task/repositories/task_log_repository.dart';
 import 'package:fisioflex_mobile/widgets/main_title_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +19,13 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage> {
   bool _showShadow = false;
-
+  final TaskLogRepository _logRepository = TaskLogRepository();
   late List<FlSpot> _randomData = [];
   int randomNumber = 0;
   double randomHours = 0;
   int selectedDayIndex = 0;
-
+  double? averageExerciseHours = 0; // Nuevo atributo para el promedio de horas
   final random = Random();
-
   void handleItemSelected(int index) {
     setState(() {
       selectedDayIndex = index;
@@ -36,14 +36,18 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   void initState() {
     randomize();
+    _logRepository.getAverageExerciseHoursByDate(DateTime.now()).then((value) {
+      setState(() {
+        averageExerciseHours = value;
+      });
+    });
     super.initState();
   }
 
-  void randomize() {
+  void randomize() async {
     _randomData.clear();
     randomNumber = Random().nextInt(120);
     randomHours = Random().nextDouble() * 2.1;
-
     for (int i = 1; i <= 7; i++) {
       final x = i.toDouble();
       final y =
@@ -86,7 +90,11 @@ class _MainHomePageState extends State<MainHomePage> {
                   MainTitleWidget(
                       title: 'Ultima semana', subtitle: getDateNow()),
                   const SizedBox(height: 30),
-                  HomeSumaryContainer(totalHours: randomHours),
+                  HomeSumaryContainer(
+                    totalHours: randomHours, // Total de horas que tienes
+                    averageExerciseHours:
+                        averageExerciseHours!, // Obtiene el promedio de horas
+                  ),
                   const SizedBox(height: 30),
                   MainTitleWidget(
                       title: 'Resultados recientes', subtitle: getDateNow()),

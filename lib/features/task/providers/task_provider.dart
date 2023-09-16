@@ -23,8 +23,6 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
   late List<TaskModel> _tasksModel = [];
   List<TaskModel> get tasksModel => _tasksModel;
 
-  int status = 0;
-
   Future<List<TaskModel>> getTasks() async {
     final token = await authRepository.getAuthToken();
     if (token != null) {
@@ -44,16 +42,10 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
     return [];
   }
 
-  setStatus(int index) {
-    debugPrint(index.toString());
-    status = index;
-    state = state;
-  }
-
-  Future<List<TaskModel>> getTaskByStatus() async {
+  Future<List<TaskModel>> getTaskByStatus(bool status) async {
     final token = await authRepository.getAuthToken();
     if (token != null) {
-      final tasks = await _taskService.getTaskByStatus(token!, status == 1);
+      final tasks = await _taskService.getTaskByStatus(token!, status);
       if (tasks.statusCode == 200) {
         final List<TaskModel> tasksList = [];
         for (final task in tasks.data['data']) {

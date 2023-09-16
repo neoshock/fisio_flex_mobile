@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 
 class HomeSumaryContainer extends StatelessWidget {
   final double totalHours;
+  final double averageExerciseHours; // Nuevo atributo para el promedio de horas
 
-  const HomeSumaryContainer({Key? key, required this.totalHours})
-      : super(key: key);
+  const HomeSumaryContainer({
+    Key? key,
+    required this.totalHours,
+    required this.averageExerciseHours, // Debes proporcionar el promedio de horas
+  }) : super(key: key);
 
   Widget _summaryItem(
-      BuildContext context, Icon icon, String title, String subtitle) {
+    BuildContext context,
+    Icon icon,
+    String title,
+    String subtitle,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,32 +40,35 @@ class HomeSumaryContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _summaryItem(
-              context,
-              Icon(
-                Icons.task_alt_outlined,
-                size: 36,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              '0',
-              'Completadas'),
+            context,
+            Icon(
+              Icons.task_alt_outlined,
+              size: 36,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            '0',
+            'Completadas',
+          ),
           _summaryItem(
-              context,
-              Icon(
-                Icons.timelapse_outlined,
-                size: 36,
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-              '${totalHours.toStringAsFixed(1)}',
-              'Horas'),
+            context,
+            Icon(
+              Icons.timelapse_outlined,
+              size: 36,
+              color: Theme.of(context).colorScheme.secondaryContainer,
+            ),
+            averageExerciseHours.toStringAsFixed(1),
+            'Minutos', // Etiqueta para el promedio de horas
+          ),
           _summaryItem(
-              context,
-              Icon(
-                Icons.meeting_room_outlined,
-                size: 36,
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              '+4',
-              'Sesiones'),
+            context,
+            Icon(
+              Icons.meeting_room_outlined,
+              size: 36,
+              color: Theme.of(context).colorScheme.secondaryContainer,
+            ),
+            '+4',
+            'Sesiones',
+          ),
         ],
       ),
     );

@@ -34,7 +34,7 @@ class TaskService {
       );
       final dio = _httpInterceptor.dio;
       final response = await dio.get(
-        '${_baseUrl}logged/tasks?status=$status',
+        '${_baseUrl}patients/8/tasks?isCompleted=$status',
       );
       return response;
     } catch (e) {
