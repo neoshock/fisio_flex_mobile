@@ -5,19 +5,21 @@ import 'package:fisioflex_mobile/features/home/widgets/home_date_list.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_header_widget.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_stats_container.dart';
 import 'package:fisioflex_mobile/features/home/widgets/home_sumary_container.dart';
+import 'package:fisioflex_mobile/features/task/providers/task_provider.dart';
 import 'package:fisioflex_mobile/features/task/repositories/task_log_repository.dart';
 import 'package:fisioflex_mobile/widgets/main_title_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MainHomePage extends StatefulWidget {
+class MainHomePage extends StatefulHookConsumerWidget {
   const MainHomePage({Key? key}) : super(key: key);
 
   @override
-  _MainHomePageState createState() => _MainHomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MainHomePageState();
 }
 
-class _MainHomePageState extends State<MainHomePage> {
+class _MainHomePageState extends ConsumerState<MainHomePage> {
   bool _showShadow = false;
   final TaskLogRepository _logRepository = TaskLogRepository();
   late List<FlSpot> _randomData = [];
@@ -26,6 +28,8 @@ class _MainHomePageState extends State<MainHomePage> {
   int selectedDayIndex = 0;
   double? averageExerciseHours = 0; // Nuevo atributo para el promedio de horas
   final random = Random();
+  int totalSessions = 0;
+
   void handleItemSelected(int index) {
     setState(() {
       selectedDayIndex = index;
@@ -39,6 +43,11 @@ class _MainHomePageState extends State<MainHomePage> {
     _logRepository.getAverageExerciseHoursByDate(DateTime.now()).then((value) {
       setState(() {
         averageExerciseHours = value;
+      });
+    });
+    ref.read(taskProvider.notifier).getTotalTaskComplete().then((value) {
+      setState(() {
+        totalSessions = value;
       });
     });
     super.initState();
@@ -91,7 +100,7 @@ class _MainHomePageState extends State<MainHomePage> {
                       title: 'Ultima semana', subtitle: getDateNow()),
                   const SizedBox(height: 30),
                   HomeSumaryContainer(
-                    totalHours: randomHours, // Total de horas que tienes
+                    totalSessions: totalSessions,
                     averageExerciseHours:
                         averageExerciseHours!, // Obtiene el promedio de horas
                   ),

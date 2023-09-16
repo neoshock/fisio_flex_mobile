@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class HomeSumaryContainer extends StatelessWidget {
-  final double totalHours;
+  final int totalSessions;
   final double averageExerciseHours; // Nuevo atributo para el promedio de horas
 
   const HomeSumaryContainer({
     Key? key,
-    required this.totalHours,
+    required this.totalSessions,
     required this.averageExerciseHours, // Debes proporcionar el promedio de horas
   }) : super(key: key);
 
@@ -46,7 +46,7 @@ class HomeSumaryContainer extends StatelessWidget {
               size: 36,
               color: Theme.of(context).colorScheme.primary,
             ),
-            '0',
+            totalSessions.toString(),
             'Completadas',
           ),
           _summaryItem(
