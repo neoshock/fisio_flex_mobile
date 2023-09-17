@@ -4,12 +4,11 @@ import 'package:fisioflex_mobile/config/const.dart';
 class HttpInterceptor {
   constructor() {}
 
-  final Dio dio = Dio(
+  late Dio dio = Dio(
     BaseOptions(
       baseUrl: APP_API_URL,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
       receiveDataWhenStatusError: true,
+      contentType: Headers.formUrlEncodedContentType,
     ),
   );
 
