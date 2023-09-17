@@ -1,0 +1,154 @@
+{
+  "project_info": {
+    "project_number": "345379941326",
+    "project_id": "iq-sos-prototype",
+    "storage_bucket": "iq-sos-prototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345379941326:android:bb162ae2fda1620075d99f",
+        "android_client_info": {
+          "package_name": "com.creo.sos.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCQv7vwDo8Vvjf1zr0qMVQBQTtLfbgSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345379941326-6so0fhe3o5akg7444g26lajh0bvbd39b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sweaden.seguros.app.mobile"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345379941326:android:0dab7857b1bfba9c75d99f",
+        "android_client_info": {
+          "package_name": "com.example.alert_app_sos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCQv7vwDo8Vvjf1zr0qMVQBQTtLfbgSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345379941326-6so0fhe3o5akg7444g26lajh0bvbd39b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sweaden.seguros.app.mobile"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345379941326:android:cdee7443758d224e75d99f",
+        "android_client_info": {
+          "package_name": "com.example.fisio_flex_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCQv7vwDo8Vvjf1zr0qMVQBQTtLfbgSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345379941326-6so0fhe3o5akg7444g26lajh0bvbd39b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sweaden.seguros.app.mobile"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345379941326:android:af97324922573b3375d99f",
+        "android_client_info": {
+          "package_name": "com.sweaden.seguros.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCQv7vwDo8Vvjf1zr0qMVQBQTtLfbgSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345379941326-85d55fg21qbh9quq42gqeu13fq2ciud1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345379941326-6so0fhe3o5akg7444g26lajh0bvbd39b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sweaden.seguros.app.mobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
