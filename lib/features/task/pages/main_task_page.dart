@@ -16,6 +16,7 @@ class MainTaskPage extends StatefulHookConsumerWidget {
 
 class _MainTaskPageState extends ConsumerState<MainTaskPage> {
   final List<String> status = ['Pendientes', 'Completadas'];
+  int? value = -1;
 
   Widget _buildTextInput(BuildContext context) {
     return textInputtWithoutlabel(
@@ -29,41 +30,48 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
   }
 
   Widget _buildChoiceChips(BuildContext context) {
-    return Wrap(
-      spacing: 15.0,
-      runSpacing: 6.0,
-      children: List<Widget>.generate(
-        status.length,
-        (int index) => _buildChoiceChip(context, index),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Wrap(
+        spacing: 15.0,
+        runSpacing: 6.0,
+        children: List<Widget>.generate(
+            status.length,
+            (int index) => ChoiceChip(
+                  label: Text(
+                    status[index],
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  labelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.background,
+                      ),
+                  avatar: status[index] == 'Pendientes'
+                      ? const Icon(
+                          Icons.pending,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                        ),
+                  selected: value == index,
+                  onSelected: (value) {
+                    setState(() {
+                      this.value = value ? index : null;
+                    });
+                    // ignore: unnecessary_null_comparison
+                    if (this.value != null) {
+                      ref
+                          .read(taskProvider.notifier)
+                          .getTaskByStatus(value ? index == 1 : index == 0);
+                    } else {
+                      ref.read(taskProvider.notifier).getTasks();
+                    }
+                  },
+                )),
       ),
-    );
-  }
-
-  Widget _buildChoiceChip(BuildContext context, int index) {
-    return ChoiceChip(
-      label: Text(
-        status[index],
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      selectedColor: Theme.of(context).colorScheme.primaryContainer,
-      padding: const EdgeInsets.all(6),
-      selected: ref.watch(taskProvider.notifier).status == index,
-      avatar: Icon(Icons.check_circle,
-          color: ref.watch(taskProvider.notifier).status == index
-              ? const Color.fromARGB(255, 45, 211, 111)
-              : const Color.fromARGB(255, 255, 255, 255)),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-            width: 1,
-            color: ref.watch(taskProvider.notifier).status == index
-                ? Theme.of(context).colorScheme.primaryContainer
-                : Theme.of(context).colorScheme.secondary),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      onSelected: (bool selected) {
-        ref.read(taskProvider.notifier).setStatus(index);
-      },
     );
   }
 
@@ -197,7 +205,6 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
 
   @override
   void initState() {
-    print('here');
     super.initState();
   }
 
@@ -210,9 +217,15 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
         children: [
           const SizedBox(height: 60),
           PageTitle('Tareas', Icons.check_circle, context),
+          const SizedBox(
+            height: 15,
+          ),
+          _buildChoiceChips(context),
           const SizedBox(height: 15),
           FutureBuilder(
-              future: ref.watch(taskProvider.notifier).getTasks(),
+              future: value != -1 && value != null
+                  ? ref.read(taskProvider.notifier).getTaskByStatus(value == 1)
+                  : ref.read(taskProvider.notifier).getTasks(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
