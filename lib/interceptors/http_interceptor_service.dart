@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:fisioflex_mobile/config/const.dart';
-import 'package:fisioflex_mobile/interceptors/http_auth_interceptor_service.dart';
 
 class HttpInterceptor {
-  constructor() {
-    addInterceptor(AuthInterceptor());
-  }
+  constructor() {}
 
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: APP_API_URL,
+      connectTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 20),
+      receiveDataWhenStatusError: true,
     ),
   );
 

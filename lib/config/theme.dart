@@ -16,7 +16,7 @@ class AppThemeData {
       onPrimary: Color.fromARGB(255, 253, 252, 255),
       onSecondary: Color.fromARGB(255, 253, 252, 255),
       onSurface: Color.fromARGB(255, 62, 72, 93),
-      onBackground: Color.fromARGB(255, 253, 252, 255),
+      onBackground: Color.fromARGB(255, 62, 72, 93),
       onError: Color.fromARGB(255, 201, 18, 18),
       brightness: Brightness.light,
       tertiary: Color.fromARGB(255, 107, 87, 120),

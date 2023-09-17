@@ -71,7 +71,7 @@ class _MainTaskPageState extends ConsumerState<MainTaskPage> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       child: GridView.builder(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(bottom: 45),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),

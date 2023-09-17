@@ -1,4 +1,4 @@
-package com.example.fisioflex_mobile
+package com.example.fisio_flex_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

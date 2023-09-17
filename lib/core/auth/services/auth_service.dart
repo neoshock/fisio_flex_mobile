@@ -20,6 +20,7 @@ class AuthService {
       );
       return response;
     } catch (e) {
+      debugPrint(e.toString());
       return Response(
         requestOptions: RequestOptions(path: ''),
         data: {'error': 'Error al iniciar sesión'},
@@ -35,9 +36,11 @@ class AuthService {
       _httpInterceptor.addHeaders(
         {'Authorization': 'Bearer $token'},
       );
-      debugPrint(token);
       final response = dio.get(
         'user/my-profile',
+        options: Options(
+          followRedirects: false,
+        )
       );
       return response;
     } catch (e) {

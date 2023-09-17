@@ -71,6 +71,12 @@ class _StoriesScreenState extends State<StoriesScreen>
         onExitFullScreen: () {
           SystemChrome.setPreferredOrientations(DeviceOrientation.values);
         },
+        onEnterFullScreen: () {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ]);
+        },
         player: YoutubePlayer(
           controller: _controller,
           showVideoProgressIndicator: true,

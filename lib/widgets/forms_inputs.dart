@@ -16,7 +16,9 @@ Widget textInputWidget(
       obscureText: obscure,
       validator: validator, // Agrega la función de validación aquí.
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         labelText: label,
         prefixIcon: icon,
       ),
@@ -49,7 +51,9 @@ Widget textInputtWithoutlabel(String label, TextEditingController controller,
           keyboardType: type,
           obscureText: obscure,
           decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red, width: 2.0)),
             alignLabelWithHint: false,
             labelText: label,
             prefixIcon: icon,
