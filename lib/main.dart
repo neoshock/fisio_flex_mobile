@@ -11,6 +11,8 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+final notificationService = NotificationService();
+
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final notificationService = NotificationService();
+
   await notificationService.initialize();
   runApp(const ProviderScope(child: MainApp()));
 }
