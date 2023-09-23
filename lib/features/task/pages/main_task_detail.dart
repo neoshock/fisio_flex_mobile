@@ -82,124 +82,129 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
     final screenSize = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
-    return FutureBuilder(
-      future: ref.read(taskProvider.notifier).getTaskById(widget.taskId),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            final task = snapshot.data.data as TaskDetailModel;
-            return Scaffold(
-                body: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification.metrics.pixels > 0 && _showBlur.value) {
-                  _showBlur.value = false;
-                } else if (notification.metrics.pixels <= 0 &&
-                    !_showBlur.value) {
-                  _showBlur.value = true;
-                }
-                return false; // Propagation of the scroll notification
-              },
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Container(
-                      alignment: Alignment.topLeft,
-                      child: GridItemHero(
-                          tag: 'taskDetail${widget.taskId}',
-                          onTap: () {},
-                          child: Stack(
-                            children: [
-                              ClipPath(
-                                clipper: BezierCurve(controlPoint: 0.24),
-                                child: Container(
-                                  width: screenSize.width,
-                                  height: screenSize.height * 0.69,
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.tertiary,
-                                  ),
-                                ),
-                              ),
-                              _buildPositionedMic(screenSize, theme, task),
-                              _buildReturnButtom(context),
-                              _buildPositionedIcon(screenSize, theme,
-                                  isCompletedTask, task.assignmentId),
-                              _buildCronometerButton(screenSize, theme),
-                              _buildPositionedCompleteContainer(
-                                  screenSize, theme, isCompletedTask),
-                              _buildPositionedTitle(
-                                  screenSize, theme, task.title),
-                              Positioned(
-                                top: screenSize.height * 0.49,
-                                left: screenSize.width * 0.045,
-                                child: MainTitleWidget(
-                                  title: 'Creado',
-                                  subtitle: task.createdAt,
-                                ),
-                              ),
-                              _buildPositionedText(
-                                  screenSize, theme, task.description),
-                            ],
-                          )),
-                    ),
-                  ),
-                  SliverFillRemaining(
-                    fillOverscroll: true,
-                    hasScrollBody: true,
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: _showBlur,
-                      builder: (context, showBlur, child) => Stack(
-                        children: [
-                          task.files.isNotEmpty
-                              ? task.files[0].type != 'mp4'
-                                  ? StoriesScreen(stories: task.files)
-                                  : Center(child: Text('No hay videos'))
-                              : Container(
-                                  child: Center(child: Text('No hay videos')),
-                                ),
-                          // Sólo muestra el blur cuando showBlur es verdadero
-                          if (showBlur) ...[
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.background,
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Theme.of(context).colorScheme.background,
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .background
-                                        .withOpacity(0.3),
-                                    Colors.transparent,
-                                    Colors.black.withOpacity(
-                                        0.4), // Opacidad en la parte inferior
+    return Scaffold(
+        body: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.pixels > 0 && _showBlur.value) {
+                _showBlur.value = false;
+              } else if (notification.metrics.pixels <= 0 && !_showBlur.value) {
+                _showBlur.value = true;
+              }
+              return false; // Propagation of the scroll notification
+            },
+            child: FutureBuilder(
+              future:
+                  ref.read(taskProvider.notifier).getTaskById(widget.taskId),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    final task = snapshot.data.data as TaskDetailModel;
+                    return CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            child: GridItemHero(
+                                tag: 'taskDetail${widget.taskId}',
+                                onTap: () {},
+                                child: Stack(
+                                  children: [
+                                    ClipPath(
+                                      clipper: BezierCurve(controlPoint: 0.24),
+                                      child: Container(
+                                        width: screenSize.width,
+                                        height: screenSize.height * 0.69,
+                                        decoration: BoxDecoration(
+                                          color: theme.colorScheme.tertiary,
+                                        ),
+                                      ),
+                                    ),
+                                    _buildPositionedMic(
+                                        screenSize, theme, task),
+                                    _buildReturnButtom(context),
+                                    _buildPositionedIcon(screenSize, theme,
+                                        isCompletedTask, task.assignmentId),
+                                    _buildCronometerButton(screenSize, theme),
+                                    _buildPositionedCompleteContainer(
+                                        screenSize, theme, isCompletedTask),
+                                    _buildPositionedTitle(
+                                        screenSize, theme, task.title),
+                                    Positioned(
+                                      top: screenSize.height * 0.49,
+                                      left: screenSize.width * 0.045,
+                                      child: MainTitleWidget(
+                                        title: 'Creado',
+                                        subtitle: task.createdAt,
+                                      ),
+                                    ),
+                                    _buildPositionedText(
+                                        screenSize, theme, task.description),
                                   ],
-                                  stops: const [
-                                    0.1,
-                                    0.6,
-                                    0.95,
-                                    1.0,
-                                  ], // Define dónde comienza y termina cada color en el degradado
-                                ),
-                              ),
+                                )),
+                          ),
+                        ),
+                        SliverFillRemaining(
+                          fillOverscroll: true,
+                          hasScrollBody: true,
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: _showBlur,
+                            builder: (context, showBlur, child) => Stack(
+                              children: [
+                                task.files.isNotEmpty
+                                    ? task.files[0].type != 'mp4'
+                                        ? StoriesScreen(stories: task.files)
+                                        : Center(child: Text('No hay videos'))
+                                    : Container(
+                                        child: Center(
+                                            child: Text('No hay videos')),
+                                      ),
+                                // Sólo muestra el blur cuando showBlur es verdadero
+                                if (showBlur) ...[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .background
+                                              .withOpacity(0.3),
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(
+                                              0.4), // Opacidad en la parte inferior
+                                        ],
+                                        stops: const [
+                                          0.1,
+                                          0.6,
+                                          0.95,
+                                          1.0,
+                                        ], // Define dónde comienza y termina cada color en el degradado
+                                      ),
+                                    ),
+                                  ),
+                                ]
+                              ],
                             ),
-                          ]
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ));
-          }
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            )));
   }
 
   Positioned _buildReturnButtom(BuildContext context) {
@@ -358,9 +363,11 @@ class _MainTaskDetailState extends ConsumerState<MainTaskDetail> {
         width: screenSize.width * 0.8,
         child: Text(
           title,
+          maxLines: 2,
           style: theme.textTheme.displayLarge!.copyWith(
             color: theme.colorScheme.background,
             fontWeight: FontWeight.bold,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),

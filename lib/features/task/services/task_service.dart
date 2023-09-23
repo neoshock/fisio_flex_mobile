@@ -27,14 +27,15 @@ class TaskService {
   }
 
   //get task by status   'https://fyc.uteq.edu.ec:4001/logged/tasks?status=true'
-  Future<Response> getTaskByStatus(String token, bool status) async {
+  Future<Response> getTaskByStatus(
+      String token, bool status, int patienId) async {
     try {
       _httpInterceptor.addHeaders(
         {'Authorization': "Bearer $token"},
       );
       final dio = _httpInterceptor.dio;
       final response = await dio.get(
-        '${_baseUrl}patients/8/tasks?isCompleted=$status',
+        '${_baseUrl}patients/$patienId/tasks?isCompleted=$status',
       );
       return response;
     } catch (e) {

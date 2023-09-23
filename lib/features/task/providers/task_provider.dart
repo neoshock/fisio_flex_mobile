@@ -53,8 +53,7 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
         for (final task in tasks.data['data']) {
           tasksList.add(TaskModel.fromJson(task));
         }
-        state = tasksList;
-        return tasksList.length;
+        return tasksList.where((element) => element.isCompleted).length;
       }
     }
     return 0;
@@ -62,8 +61,10 @@ class TaskNotifier extends StateNotifier<List<TaskModel>> {
 
   Future<List<TaskModel>> getTaskByStatus(bool status) async {
     final token = await authRepository.getAuthToken();
+    final user = await _authService.getUserByIdentification(token!);
     if (token != null) {
-      final tasks = await _taskService.getTaskByStatus(token!, status);
+      final tasks = await _taskService.getTaskByStatus(
+          token!, status, user.data['data']['id']);
       if (tasks.statusCode == 200) {
         final List<TaskModel> tasksList = [];
         for (final task in tasks.data['data']) {

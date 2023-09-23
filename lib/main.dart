@@ -11,9 +11,9 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-final notificationService = NotificationService();
+//final notificationService = NotificationService();
 
-void main() async {
+void main() {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -24,11 +24,10 @@ void main() async {
     DeviceOrientation
         .landscapeRight, // Para habilitar el modo apaisado a la derecha
   ]);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await notificationService.initialize();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  //await notificationService.initialize();
   runApp(const ProviderScope(child: MainApp()));
 }
 

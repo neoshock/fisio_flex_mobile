@@ -1,4 +1,5 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:fisioflex_mobile/core/notifications/notification_service.dart';
 import 'package:fisioflex_mobile/features/home/pages/main_home_page.dart';
 import 'package:fisioflex_mobile/features/profile/pages/main_profile_page.dart';
 import 'package:fisioflex_mobile/features/task/pages/main_task_page.dart';
@@ -17,12 +18,19 @@ class _BottomMenuState extends State<BottomMenu> {
 
   /// Controller to handle bottom nav bar and also handles initial page
   final _controller = NotchBottomBarController(index: 0);
+  //final NotificationService _notificationService = NotificationService();
 
   final List<Widget> pages = [
     const MainHomePage(),
     MainTaskPage(),
     MainProfilePage()
   ];
+
+  @override
+  void initState() {
+    //_notificationService.getPermission();
+    super.initState();
+  }
 
   @override
   void dispose() {

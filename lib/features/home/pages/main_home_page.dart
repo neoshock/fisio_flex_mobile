@@ -53,6 +53,12 @@ class _MainHomePageState extends ConsumerState<MainHomePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _randomData.clear();
+    super.dispose();
+  }
+
   void randomize() async {
     _randomData.clear();
     randomNumber = Random().nextInt(120);

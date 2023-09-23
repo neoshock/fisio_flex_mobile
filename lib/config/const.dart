@@ -1,1 +1,1 @@
-final String APP_API_URL = "https://fyc.uteq.edu.ec:4001/";
+final String APP_API_URL = "http://localhost:3000/";

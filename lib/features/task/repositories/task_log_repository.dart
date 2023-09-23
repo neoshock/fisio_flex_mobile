@@ -79,7 +79,8 @@ class TaskLogRepository {
       }
     } catch (e) {
       print('Error: $e');
+      return 0;
     }
-    return null;
+    return 0;
   }
 }
